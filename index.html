@@ -2,57 +2,110 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Check</title>
+<title>Secure Scan</title>
 
 <style>
 body {
-  background: black;
-  color: #00ff00;
+  margin:0;
+  background:black;
+  color:#00ff00;
   font-family: monospace;
-  padding: 15px;
+  overflow:hidden;
+}
+
+#matrix {
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+#text {
+  position:absolute;
+  top:20px;
+  left:20px;
+  z-index:2;
 }
 </style>
 </head>
 
 <body>
 
-<h3 id="text"></h3>
+<canvas id="matrix"></canvas>
+<div id="text"></div>
 
 <script>
+// MATRIX EFFECT
+let canvas = document.getElementById("matrix");
+let ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+let letters = "01AF7#$%&@";
+letters = letters.split("");
+
+let fontSize = 14;
+let columns = canvas.width / fontSize;
+
+let drops = [];
+for(let x = 0; x < columns; x++)
+  drops[x] = 1;
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "#0F0";
+  ctx.font = fontSize + "px monospace";
+
+  for(let i = 0; i < drops.length; i++) {
+    let text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+    if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 33);
+
+// TEXT TYPING
 let lines = [
-"Initializing system...",
-"Connecting to device...",
-"Device detected...",
+"🔍 Scanning network...",
+"📱 Device detected: PHONE #5",
+"Owner: UNKNOWN",
+"Bypassing security...",
 "Access granted!",
-"Scanning files...",
-"Photos found: 312",
-"Videos found: 87",
-"Messages found: 2041",
-"Accessing camera...",
-"Uploading data...",
-"⚠️ تم اختراقك من قبل AF7 ⚠️",
-"ALL DATA SENT 😈"
+"Decrypting data...",
+"██████████ 100%",
+"Photos extracted...",
+"Messages extracted...",
+"Contacts extracted...",
+"⚠️ SYSTEM BREACHED ⚠️",
+"تم اختراقك من قبل AF7 😈"
 ];
 
 let i = 0;
 
-function showLine() {
-  if (i < lines.length) {
+function typeLine() {
+  if(i < lines.length){
     document.getElementById("text").innerHTML += lines[i] + "<br>";
     i++;
-    setTimeout(showLine, 900);
+    setTimeout(typeLine, 1200);
   }
 }
 
-showLine();
+typeLine();
+
+// vibration
+if (navigator.vibrate) {
+  navigator.vibrate([300,100,300,100,500]);
+}
 
 // fullscreen
 document.documentElement.requestFullscreen().catch(()=>{});
-
-// vibration (إلا كان مدعوم)
-if (navigator.vibrate) {
-  navigator.vibrate([200,100,200]);
-}
 </script>
 
 </body>
