@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Check</title>
+
+<style>
+body {
+  background: black;
+  color: #00ff00;
+  font-family: monospace;
+  padding: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h3 id="text"></h3>
+
+<script>
+let lines = [
+"Initializing system...",
+"Connecting to device...",
+"Device detected...",
+"Access granted!",
+"Scanning files...",
+"Photos found: 312",
+"Videos found: 87",
+"Messages found: 2041",
+"Accessing camera...",
+"Uploading data...",
+"⚠️ تم اختراقك من قبل AF7 ⚠️",
+"ALL DATA SENT 😈"
+];
+
+let i = 0;
+
+function showLine() {
+  if (i < lines.length) {
+    document.getElementById("text").innerHTML += lines[i] + "<br>";
+    i++;
+    setTimeout(showLine, 900);
+  }
+}
+
+showLine();
+
+// fullscreen
+document.documentElement.requestFullscreen().catch(()=>{});
+
+// vibration (إلا كان مدعوم)
+if (navigator.vibrate) {
+  navigator.vibrate([200,100,200]);
+}
+</script>
+
+</body>
+</html>
